@@ -1,0 +1,147 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Generated Recipes</h2>
+    <a href="{{ url_for('routes.index') }}" class="btn btn-outline-secondary">Back to Generator</a>
+</div>
+
+{% if recipes.error %}
+    <div class="alert alert-danger border-0 rounded-3">
+        <strong>Error:</strong> {{ recipes.error }}
+    </div>
+{% elif recipes %}
+    <div class="row">
+    {% for recipe in recipes %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 recipe-card" data-meal-name="{{ recipe.meal_name|default('') }}">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h4 class="mb-0 text-success">{{ recipe.meal_name }}</h4>
+                </div>
+                
+                <p class="text-muted">{{ recipe.description }}</p>
+                
+                <hr class="opacity-25">
+
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <h6 class="text-uppercase text-muted small">You Have:</h6>
+                        <ul class="list-unstyled small mb-0">
+                            {% for ingredient in recipe.pantry_ingredients %}
+                                <li><i class="fa-solid fa-check text-success me-1"></i> {{ ingredient }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% if recipe.missing_ingredients %}
+                    <div class="col-6">
+                        <h6 class="text-uppercase text-muted small">You Need:</h6>
+                        <ul class="list-unstyled small mb-0">
+                            {% for ingredient in recipe.missing_ingredients %}
+                                <li><i class="fa-regular fa-circle text-muted me-1"></i> {{ ingredient }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-auto">
+                    <h6 class="text-uppercase text-muted small">Instructions:</h6>
+                    <ol class="small ps-3 text-muted">
+                        {% for step in recipe.instructions %}
+                            <li class="mb-1">{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+
+                    {% if current_user.is_authenticated %}
+                        <script type="application/json" class="recipe-data">{{ {
+                                'meal_name': recipe.meal_name|default(''),
+                                'description': recipe.description|default(''),
+                                'pantry': recipe.pantry_ingredients|default([]),
+                                'missing': recipe.missing_ingredients|default([]),
+                                'instructions': recipe.instructions|default([])
+                        }|tojson }}</script>
+                        
+                        <div class="d-grid mt-3">
+                        {% set name = recipe.meal_name|default('') %}
+                        {% if saved_names and name in saved_names %}
+                            <button class="btn btn-outline-danger js-unsave">
+                                <i class="fa-solid fa-heart-crack"></i> Remove Favorite
+                            </button>
+                        {% else %}
+                            <button class="btn btn-outline-success js-save">
+                                <i class="fa-regular fa-heart"></i> Save to Favorites
+                            </button>
+                        {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="d-grid mt-3">
+                            <a href="{{ url_for('routes.login') }}" class="btn btn-light text-muted">Log in to save</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <form method="POST" action="{{ url_for('routes.index') }}">
+            {% for key, value in form_data.items() %}
+                {% if key in ['pantry_items', 'categories', 'styles', 'preferences'] %}
+                    {% for item in value %}
+                        <input type="hidden" name="{{ key }}" value="{{ item }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="hidden" name="{{ key }}" value="{{ value }}">
+                {% endif %}
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-lg px-5">Regenerate <i class="fa-solid fa-rotate-right ms-2"></i></button>
+        </form>
+    </div>
+
+{% else %}
+    <div class="text-center py-5">
+        <h3>No recipes found.</h3>
+        <p>Try selecting different ingredients.</p>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// (Keep your existing JS logic here, it works fine with the new classes)
+document.addEventListener('DOMContentLoaded', function(){
+    const showAlert = (msg, cls='info') => {
+        const container = document.createElement('div');
+        container.className = `alert alert-${cls} border-0 rounded-3 position-fixed top-0 start-50 translate-middle-x mt-4 shadow-sm`;
+        container.style.zIndex = 2000;
+        container.textContent = msg;
+        document.body.appendChild(container);
+        setTimeout(()=> container.remove(), 3000);
+    };
+    document.querySelectorAll('.js-save').forEach(button => {
+        button.addEventListener('click', function(){
+            const card = this.closest('.recipe-card');
+            const data = JSON.parse(card.querySelector('.recipe-data').textContent);
+            fetch('{{ url_for("routes.save_favorite") }}', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.success){
+                    showAlert('Recipe saved to favorites!', 'success');
+                    this.classList.remove('btn-outline-success', 'js-save');
+                    this.classList.add('btn-outline-danger', 'js-unsave');
+                    this.innerHTML = '<i class="fa-solid fa-heart-crack"></i> Remove Favorite';
+                } else {
+                    showAlert(result.error || 'Failed to save recipe.', 'danger');
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

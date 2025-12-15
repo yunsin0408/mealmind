@@ -1,0 +1,51 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2 class="mb-3">Edit Item</h2>
+    
+    <div class="card">
+      <form method="post" action="{{ url_for('routes.edit_item', item_id=item.id) }}">
+        
+        <div class="mb-3">
+          <label class="form-label" for="name">Name</label>
+          <input id="name" name="name" class="form-control" value="{{ item.name }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="category_id">Category</label>
+          <select id="category_id" name="category_id" class="form-select" required>
+            <option value="">Select category</option>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}" {% if item.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label class="form-label" for="quantity">Quantity</label>
+                <input id="quantity" name="quantity" class="form-control" value="{{ item.quantity if item.quantity is not none else '' }}">
+            </div>
+            <div class="col-6 mb-3">
+                <label class="form-label" for="unit">Unit</label>
+                <input id="unit" name="unit" class="form-control" value="{{ item.unit }}">
+            </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label" for="expiration_date">Expiration Date</label>
+          <input id="expiration_date" name="expiration_date" type="date" class="form-control" value="{{ item.expiration_date.isoformat() if item.expiration_date }}">
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-success flex-grow-1" type="submit">Save Changes</button>
+          <a href="{{ url_for('routes.pantry') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

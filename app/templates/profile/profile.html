@@ -1,0 +1,41 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2 class="mb-4">My Profile</h2>
+    
+    {% if current_user.is_authenticated %}
+      <div class="card text-center py-5">
+        <div class="mb-3">
+            <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px; font-size: 2rem; color: #10b981;">
+                {{ current_user.username[0]|upper }}
+            </div>
+        </div>
+        
+        <h3 class="mb-1">{{ current_user.username }}</h3>
+        <p class="text-muted">{{ current_user.email }}</p>
+        
+        <div class="mt-4 d-flex flex-column align-items-center gap-2">
+          <a href="{{ url_for('routes.favorites') }}" class="btn btn-outline-secondary w-100">
+            <i class="fa-regular fa-heart me-2"></i> My Favorites
+          </a>
+          <a href="{{ url_for('routes.edit_profile') }}" class="btn btn-outline-primary w-100">
+            <i class="fa-solid fa-pen"></i> Edit Profile
+          </a>
+          <a href="{{ url_for('routes.reset_request') }}" class="btn btn-outline-warning w-100">
+            <i class="fa-solid fa-key me-2"></i> Reset Password
+          </a>
+          <a href="{{ url_for('routes.logout') }}" class="btn btn-outline-danger w-100">
+            <i class="fa-solid fa-sign-out-alt me-2"></i> Log Out
+          </a>
+        </div>
+      </div>
+    {% else %}
+      <div class="text-center">
+        <p>Please <a href="{{ url_for('routes.login') }}">login</a> to view your profile.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

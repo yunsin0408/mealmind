@@ -1,0 +1,55 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<div class="text-center py-5 mb-4">
+    <h1 class="display-5 fw-bold mb-3">Welcome to <span style="color: var(--accent-color);">Mealmind</span></h1>
+    <p class="lead text-muted mx-auto" style="max-width: 600px;">
+        The friendly kitchen assistant that helps you cook with what you have, saving money and the planet.
+    </p>
+    <a href="#generator" class="btn btn-primary btn-lg mt-3">Start Cooking</a>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-8 mx-auto text-center">
+        <h2 class="h4 mb-3">🥦 Our Mission</h2>
+        <p class="text-muted">
+        Unlock the potential of your pantry. Mealmind transforms your ingredients from a disorganized list 
+        into a canvas for culinary creativity, ensuring no good food—or great idea—goes to waste.
+        </p>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div style="font-size: 2.5rem;" class="mb-3">🥑</div>
+            <h5>Fresh Tracking</h5>
+            <p class="text-muted small">Keep an inventory of your pantry so you never let an avocado go bad again.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div style="font-size: 2.5rem;" class="mb-3">🧠</div>
+            <h5>Smart Ideas</h5>
+            <p class="text-muted small">AI-powered recipe suggestions based on what you already have in your pantry.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div style="font-size: 2.5rem;" class="mb-3">🌎</div>
+            <h5>Eco Friendly</h5>
+            <p class="text-muted small">Reduce food waste by cooking expiring items first.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Generator anchor -->
+<section id="generator" class="mb-5">
+    {% include 'generator/generator.html' %}
+</section>
+
+<div class="text-center py-4">
+    <p class="small text-muted">&copy; 2025 MealMind. Made with 💚.</p>
+</div>
+
+{% endblock %}

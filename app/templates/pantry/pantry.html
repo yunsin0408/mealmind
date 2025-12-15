@@ -1,0 +1,91 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>My Pantry</h1>
+        <p class="text-muted">Manage your inventory to reduce waste.</p>
+    </div>
+    <a href="{{ url_for('routes.add_item') }}" class="btn btn-primary d-none d-md-inline-block">
+        <i class="fa-solid fa-plus"></i> Add Item
+    </a>
+</div>
+
+<div class="control-panel mb-4">
+    <form method="get" action="{{ url_for('routes.pantry') }}" class="row g-3 align-items-end">
+        
+        <div class="col-md-5">
+            <label class="form-label" for="q">Search</label>
+            <input id="q" name="q" class="form-control" value="{{ q if q is defined else '' }}" placeholder="e.g. Quinoa...">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label" for="category">Category</label>
+            <select id="category" name="category" class="form-select">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if selected_category == cat.id|string %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label" for="exp_before">Expires By</label>
+            <input type="date" id="exp_before" name="exp_before" class="form-control" value="{{ exp_before if exp_before is defined else '' }}">
+        </div>
+
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-50">Filter</button>
+            <a href="{{ url_for('routes.pantry') }}" class="btn btn-outline-secondary w-50">Reset</a>
+        </div>
+    </form>
+</div>
+
+{% if items %}
+<div class="card p-0 overflow-hidden">
+    <table class="table table-hover mb-0">
+        <thead style="background-color: #f8fafc;">
+            <tr>
+                <th class="ps-4">Item Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Expiry</th>
+                <th class="text-end pe-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="ps-4 fw-500">{{ item.name }}</td>
+                <td><span class="badge-custom">{{ item.category.name }}</span></td>
+                <td class="text-muted">{{ item.quantity }} {{ item.unit }}</td>
+                <td class="text-muted">{{ item.expiration_date }}</td>
+                <td class="text-end pe-4">
+                    <a href="{{ url_for('routes.edit_item', item_id=item.id) }}" class="action-icon edit" title="Edit">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                    <a href="{{ url_for('routes.delete_item', item_id=item.id) }}" class="action-icon delete" title="Delete" onclick="return confirm('Delete this item?')">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5">
+    <div style="font-size: 3rem; margin-bottom: 1rem;"></div>
+    <h3>Your pantry is empty</h3>
+    <p class="text-muted">Add items to start generating recipes.</p>
+    <a href="{{ url_for('routes.add_item') }}" class="btn btn-primary mt-2">Add First Item</a>
+</div>
+{% endif %}
+
+<a href="{{ url_for('routes.add_item') }}" class="d-md-none position-fixed bottom-0 end-0 m-4 btn btn-primary rounded-circle shadow-none d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 24px; z-index: 100;">
+    +
+</a>
+
+{% endblock %}

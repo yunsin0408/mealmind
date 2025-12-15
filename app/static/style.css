@@ -1,0 +1,179 @@
+/* --- Global & Typography --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap');
+
+:root {
+    --primary-green: #10b981; /* Fresh Emerald */
+    --hover-green: #059669;
+    --bg-color: #f8faf9;      /* Very pale organic white */
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --card-bg: #ffffff;
+    --border-radius: 12px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Poppins', sans-serif;
+    color: #064e3b; /* Deep Forest Green */
+    font-weight: 600;
+}
+
+/* --- Navigation --- */
+.navbar {
+    background-color: var(--card-bg) !important;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 2rem;
+}
+
+.nav-link {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: var(--text-main) !important;
+    margin-left: 1rem;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--primary-green) !important;
+}
+
+.nav-link.active {
+    color: var(--primary-green) !important;
+}
+
+.nav-icon-img {
+    width: 50px;  
+    height: 50px; 
+    
+    object-fit: contain; 
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* --- Cards & Containers --- */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.card, .control-panel, .recipe-card {
+    background: var(--card-bg);
+    border: 1px solid #e5e7eb;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    /* NO SHADOW as requested */
+    box-shadow: none !important; 
+    margin-bottom: 1.5rem;
+}
+
+/* --- Forms & Inputs --- */
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.form-control, .form-select, .pro-input {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    box-shadow: none !important; /* No internal shadows */
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-green);
+    background-color: #fff;
+    outline: none;
+    box-shadow: none !important;
+}
+
+/* --- Buttons (Flat, No Shadow) --- */
+.btn {
+    display: inline-flex;       /* Use flex to align icon and text */
+    justify-content: center;    /* Horizontally center */
+    align-items: center;        /* Vertically center*/
+    text-align: center;
+
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 500;
+    border: none;
+    box-shadow: none;
+    transition: background-color 0.2s;
+}
+
+.btn-primary, .btn-success, .btn-primary-solid {
+    background-color: var(--primary-green);
+    color: white;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-primary-solid:hover {
+    background-color: var(--hover-green);
+}
+
+.btn-outline-secondary {
+    border: 1px solid #d1d5db;
+    color: var(--text-main);
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f3f4f6;
+    color: var(--text-main);
+}
+
+.btn-danger {
+    background-color: #ef4444;
+}
+
+/* --- Tables (For Favorites/Pantry) --- */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom-width: 1px;
+    font-weight: 600;
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 1rem 0.75rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* --- Badges --- */
+.badge-custom {
+    background-color: #ecfdf5;
+    color: var(--primary-green);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* --- Icons --- */
+.action-icon {
+    color: #9ca3af;
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+    border: none;
+    background: none;
+}
+.action-icon:hover.edit { color: #3b82f6; }
+.action-icon:hover.delete { color: #ef4444; }

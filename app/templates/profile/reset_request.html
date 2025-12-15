@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}
+
+{% block title %}Reset Password{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h3>Reset Password</h3>
+    <p>Enter your email address, and we will send you a link to reset your password if the email exists in our system.</p>
+    <form method="post">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Send Reset Link</button>
+      <a href="{{ url_for('routes.login') }}" class="btn btn-link">Back to Login</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

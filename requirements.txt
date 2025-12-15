@@ -1,0 +1,13 @@
+Flask>=2.2,<3.0
+flask_sqlalchemy
+SQLAlchemy>=2.0,<3.0
+Flask-Login>=0.6,<0.7
+Flask-Mail>=0.9,<1.0
+Flask-Cors==3.0.10
+python-dotenv
+requests
+gunicorn
+Werkzeug
+Jinja2
+itsdangerous
+

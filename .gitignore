@@ -1,0 +1,15 @@
+env/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+dist/
+build/
+*.egg-info/
+*.sqlite3
+.DS_Store
+.vscode/
+static/uploads/
+create_admin.py
