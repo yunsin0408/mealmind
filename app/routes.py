@@ -140,7 +140,7 @@ Return **strict JSON array** of recipes. Each recipe must have:
                 except JSONDecodeError:
                     continue
 
-        # As a last resort, try to extract bracketed substrings with regex
+        # try to extract bracketed substrings with regex
         import re
         candidates = re.findall(r"(\[.*?\])", text, flags=re.S)
         for cand in candidates:
@@ -224,7 +224,7 @@ def add_item():
 def delete_item(item_id):
     from .models import PantryItem
     item = PantryItem.query.get_or_404(item_id)
-    # ensure user owns the item (or admin)
+    # ensure user owns the item 
     if item.user_id != current_user.id and not getattr(current_user, 'is_admin', False):
         flash('Not authorized to delete this item.', 'danger')
         return redirect(url_for('routes.pantry'))
@@ -294,20 +294,20 @@ def admin_user_action(user_id):
         if user.is_confirmed and not user.confirmed_on:
             user.confirmed_on = datetime.now()
         db.session.commit()
-        flash('使用者確認狀態已更新。', 'success')
+        flash('User confirmation status updated.', 'success')
     elif action == 'toggle_admin':
         user.is_admin = not user.is_admin
         db.session.commit()
-        flash('使用者管理員身分已更新。', 'success')
+        flash('User admin status updated.', 'success')
     elif action == 'delete':
         if user.id == current_user.id:
-            flash('無法刪除您自己的管理員帳號。', 'danger')
+            flash('Cannot delete your own admin account.', 'danger')
         else:
             db.session.delete(user)
             db.session.commit()
-            flash('使用者已刪除。', 'info')
+            flash('User has been deleted.', 'info')
     else:
-        flash('未知的操作。', 'warning')
+        flash('Unknown action.', 'warning')
     return redirect(url_for('routes.admin_dashboard'))
 
 
@@ -386,24 +386,24 @@ def reset_with_token(token):
     from email_utils import confirm_password_reset_token
     email = confirm_password_reset_token(token)
     if not email:
-        flash('重設連結無效或已過期。請重新嘗試密碼重設流程。', 'danger')
+        flash('The reset link is invalid or has expired. Please try the password reset process again.', 'danger')
         return redirect(url_for('routes.reset_request'))
 
     user = User.query.filter_by(email=email).first()
     if not user:
-        flash('找不到該帳號。', 'danger')
+        flash('Account not found.', 'danger')
         return redirect(url_for('routes.register'))
 
     if request.method == 'POST':
         password = request.form.get('password')
         password2 = request.form.get('confirm_password')
         if not password or password != password2:
-            flash('密碼不相符或為空，請重試。', 'warning')
+            flash('Passwords do not match or are empty, please try again.', 'warning')
             return redirect(url_for('routes.reset_with_token', token=token))
         # set new password
         user.set_password(password)
         db.session.commit()
-        flash('密碼已更新。請用新密碼登入。', 'success')
+        flash('Password has been updated. Please log in with your new password.', 'success')
         return redirect(url_for('routes.login'))
 
     return render_template('profile/reset_password.html', token=token, email=email)
@@ -499,8 +499,9 @@ def save_recipe():
 
     meal_name = request.form.get('meal_name')
     description = request.form.get('description')
-    pantry_ingredients = request.form.get('pantry_ingredients')
-    missing_ingredients = request.form.get('missing_ingredients')
+    # Accept either legacy keys ('pantry','missing') or new keys ('pantry_ingredients','missing_ingredients')
+    pantry_ingredients = request.form.get('pantry_ingredients') or request.form.get('pantry')
+    missing_ingredients = request.form.get('missing_ingredients') or request.form.get('missing')
     instructions = request.form.get('instructions')
 
     # Parse JSON fields (they are sent as JSON strings via hidden inputs)
@@ -536,6 +537,42 @@ def save_recipe():
 def favorites():
     from .models import SavedRecipe
     recipes = SavedRecipe.query.filter_by(user_id=current_user.id).order_by(SavedRecipe.created_on.desc()).all()
+    # Ensure JSON fields are proper Python lists (handle stringified JSON from older rows)
+    import json as _json
+    def _ensure_list(val):
+        if val is None:
+            return []
+        if isinstance(val, (list, tuple)):
+            return list(val)
+        if isinstance(val, str):
+            try:
+                parsed = _json.loads(val)
+                if isinstance(parsed, (list, tuple)):
+                    return list(parsed)
+                # fallthrough: parsed but not list
+            except Exception:
+                # not JSON, maybe comma-separated
+                return [s.strip() for s in val.split(',') if s.strip()]
+        # unknown type, try to coerce to list
+        try:
+            return list(val)
+        except Exception:
+            return [str(val)]
+
+    for r in recipes:
+        try:
+            r.pantry_ingredients = _ensure_list(r.pantry_ingredients)
+        except Exception:
+            r.pantry_ingredients = []
+        try:
+            r.missing_ingredients = _ensure_list(r.missing_ingredients)
+        except Exception:
+            r.missing_ingredients = []
+        try:
+            r.instructions = _ensure_list(r.instructions)
+        except Exception:
+            r.instructions = []
+
     return render_template('generator/favorites.html', recipes=recipes)
 
 
@@ -581,8 +618,9 @@ def api_save_recipe():
     data = request.get_json() or request.form
     meal_name = data.get('meal_name')
     description = data.get('description')
-    pantry = data.get('pantry_ingredients')
-    missing = data.get('missing_ingredients')
+    # Accept both legacy and new keys for backward compatibility
+    pantry = data.get('pantry_ingredients') or data.get('pantry')
+    missing = data.get('missing_ingredients') or data.get('missing')
     instructions = data.get('instructions')
 
     # If strings are JSON-encoded, try to parse them

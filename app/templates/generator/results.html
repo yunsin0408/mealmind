@@ -54,11 +54,11 @@
 
                     {% if current_user.is_authenticated %}
                         <script type="application/json" class="recipe-data">{{ {
-                                'meal_name': recipe.meal_name|default(''),
-                                'description': recipe.description|default(''),
-                                'pantry': recipe.pantry_ingredients|default([]),
-                                'missing': recipe.missing_ingredients|default([]),
-                                'instructions': recipe.instructions|default([])
+                            'meal_name': recipe.meal_name|default(''),
+                            'description': recipe.description|default(''),
+                            'pantry_ingredients': recipe.pantry_ingredients|default([]),
+                            'missing_ingredients': recipe.missing_ingredients|default([]),
+                            'instructions': recipe.instructions|default([])
                         }|tojson }}</script>
                         
                         <div class="d-grid mt-3">
