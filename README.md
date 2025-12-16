@@ -1,27 +1,29 @@
-#Mealmind Mealmind is a smart virtual pantry application designed to help users track ingredients, reduce food waste, and generate creative meal ideas based on what they already have at home. 
+#Mealmind 
+Mealmind is a smart virtual pantry application designed to help users track ingredients, reduce food waste, and generate creative meal ideas based on what they already have at home. 
 
-##🚀 Features* 
-**Virtual Pantry Tracker**:
-* Add, edit, and remove ingredients from your personal inventory.
-* Track quantities, categories, and expiration dates.
-
-
-* **Smart Meal Generator**:
-* Generate recipe ideas based on the ingredients currently in your pantry. Users can select the ingredients to be used or let AI decide!
-* Save your favorite generated meals for later.
+##🚀 Features
+ **Virtual Pantry Tracker**:
+  * Add, edit, and remove ingredients from your personal inventory.
+  * Track quantities, categories, and expiration dates.
 
 
-* **User Authentication**:
-* Secure Login and Registration system.
-* Password reset functionality via email.
-* Personalized profile management.
+ **Smart Meal Generator**:
+  * Generate recipe ideas based on the ingredients currently in your pantry. Users can select the ingredients to be used or let AI decide!
+  * Save your favorite generated meals for later.
 
 
-##🛠️ Tech Stack* **Backend**: Python 3.10+, Flask
-* **Database**: SQLite (via SQLAlchemy ORM)
-* **Frontend**: HTML5, CSS3, Jinja2 Templates
-* **Authentication**: Flask-Login
-* **Utilities**: Python-dotenv, Email-validator
+ **User Authentication**:
+  * Secure Login and Registration system.
+  * Password reset functionality via email.
+  * Personalized profile management.
+
+
+##🛠️ Tech Stack
+  * **Backend**: Python 3.10+, Flask
+  * **Database**: SQLite (via SQLAlchemy ORM)
+  * **Frontend**: HTML5, CSS3, Jinja2 Templates
+  * **Authentication**: Flask-Login
+  * **Utilities**: Python-dotenv, Email-validator
 
 ##Project Structure```text
 mealmind/
