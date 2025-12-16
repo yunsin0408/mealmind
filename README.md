@@ -99,8 +99,10 @@ MAIL_PASSWORD=your_email_password
 
 
 5. **Initialize the Database**
+
 The app is set to create the database automatically on the first run.
-6. **Run the Application**
+
+7. **Run the Application**
 ```bash
 python run.py
 
@@ -110,8 +112,8 @@ python run.py
 Open your browser and navigate to `http://127.0.0.1:5000`.
 
 ## Usage
-1. **Register** a new account. Confirm your account via email
+1. Register a new account. Confirm your account via email
 2. Go to **My Pantry** to add items you currently have (e.g., "Chicken", "Rice", "Broccoli").
 3. Navigate to **Meal Generator** and click "Generate" to see what you can cook.
-4. **Save** recipes you like to your favorites list.
+4. Save recipes you like to your favorites list.
 
