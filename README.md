@@ -1,31 +1,33 @@
-#Mealmind 
+# Mealmind 
 Mealmind is a smart virtual pantry application designed to help users track ingredients, reduce food waste, and generate creative meal ideas based on what they already have at home. 
 
-##🚀 Features
+
+## 🚀 Features
  **Virtual Pantry Tracker**:
-  * Add, edit, and remove ingredients from your personal inventory.
-  * Track quantities, categories, and expiration dates.
+* Add, edit, and remove ingredients from your personal inventory.
+* Track quantities, categories, and expiration dates.
 
 
  **Smart Meal Generator**:
-  * Generate recipe ideas based on the ingredients currently in your pantry. Users can select the ingredients to be used or let AI decide!
-  * Save your favorite generated meals for later.
+* Generate recipe ideas based on the ingredients currently in your pantry. Users can select ingredients or have AI choose for them!
+* Save your favorite generated meals for later.
 
 
  **User Authentication**:
-  * Secure Login and Registration system.
-  * Password reset functionality via email.
-  * Personalized profile management.
+* Secure Login and Registration system.
+* Password reset functionality via email.
+* Personalized profile management.
 
 
-##🛠️ Tech Stack
-  * **Backend**: Python 3.10+, Flask
-  * **Database**: SQLite (via SQLAlchemy ORM)
-  * **Frontend**: HTML5, CSS3, Jinja2 Templates
-  * **Authentication**: Flask-Login
-  * **Utilities**: Python-dotenv, Email-validator
+## 🚀 Tech Stack
+* **Backend**: Python 3.10+, Flask
+* **Database**: SQLite (via SQLAlchemy ORM)
+* **Frontend**: HTML5, CSS3, Jinja2 Templates
+* **Authentication**: Flask-Login
+* **Utilities**: Python-dotenv, Email-validator
 
-##Project Structure```text
+## Project Structure
+```text
 mealmind/
 ├── app/
 │   ├── __init__.py         # App factory and configuration
@@ -47,12 +49,12 @@ mealmind/
 
 ```
 
-##⚡ Getting Started Follow these instructions to set up the project on your local machine.
-
-###Prerequisites* Python 3.8 or higher
+### Prerequisites
+* Python 3.8 or higher
 * Git
 
-###Installation1. **Clone the repository**
+### Installation
+1. **Clone the repository**
 ```bash
 git clone https://github.com/yunsin0408/mealmind.git
 cd mealmind
@@ -84,7 +86,7 @@ pip install -r requirements.txt
 Create a `.env` file in the root directory and add the following:
 ```ini
 SECRET_KEY=your_secret_key_here
-DATABASE_URL= sqlite:///yourdatabase.db
+DATABASE_URL=sqlite:///database.db
 HF_TOKEN=your_hugging_face_token
 # If using email features:
 MAIL_SERVER=smtp.gmail.com
@@ -107,8 +109,8 @@ python run.py
 
 Open your browser and navigate to `http://127.0.0.1:5000`.
 
-##Usage
-1. **Register** a new account. Confirm your account via email.
+## Usage
+1. **Register** a new account. Confirm your account via email
 2. Go to **My Pantry** to add items you currently have (e.g., "Chicken", "Rice", "Broccoli").
 3. Navigate to **Meal Generator** and click "Generate" to see what you can cook.
 4. **Save** recipes you like to your favorites list.
