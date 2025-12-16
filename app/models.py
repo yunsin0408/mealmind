@@ -100,7 +100,8 @@ class SavedRecipe(db.Model):
     __tablename__ = 'saved_recipes'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # Use ON DELETE CASCADE so that deleting a user removes their saved recipes
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     meal_name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
     pantry_ingredients = db.Column(db.JSON, nullable=True)
@@ -108,7 +109,8 @@ class SavedRecipe(db.Model):
     instructions = db.Column(db.JSON, nullable=True)
     created_on = db.Column(db.DateTime, default=datetime.now)
 
-    user = db.relationship('User', backref='saved_recipes')
+    # Configure relationship to cascade deletes from the ORM side as well.
+    user = db.relationship('User', backref=db.backref('saved_recipes', cascade='all, delete-orphan', passive_deletes=True))
 
     def __repr__(self):
         return f"<SavedRecipe {self.meal_name} by user {self.user_id}>"

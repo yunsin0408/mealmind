@@ -55,8 +55,15 @@ Return **strict JSON array** of recipes. Each recipe must have:
             allergy_list = str(allergies).strip()
         if allergy_list:
             allergy_instr = f"\n\nIMPORTANT: The user has the following allergies: {allergy_list}. DO NOT include any of these ingredients in the recipes, pantry_ingredients, missing_ingredients, or instructions. If a common ingredient conflicts with these allergies, suggest safe substitutes and explicitly state the substitution."
+    
     # Allow model selection from a passed override, then app config, then sensible default
-    model_id = model_override or current_app.config.get('HF_MODEL', 'mistralai/mixtral-instruct-8x:latest')
+    model_id = model_override or current_app.config.get('HF_MODEL')
+    try:
+        if isinstance(model_id, str) and ':' in model_id:
+            model_id = model_id.split(':')[0]
+    except Exception:
+        # if sanitization fails, fall back to original value
+        pass
     # attach allergy instruction into prompt
     if allergy_instr:
         prompt = prompt + allergy_instr
@@ -75,9 +82,46 @@ Return **strict JSON array** of recipes. Each recipe must have:
 
     try:
         response = query(payload)
-        text = response["choices"][0]["message"]["content"]
     except Exception as e:
         return {"error": f"LLM Connection Error: {str(e)}"}
+
+    # Normalize responses from different LLM providers / HF endpoints
+    try:
+        if isinstance(response, dict) and response.get('error'):
+            return {"error": f"LLM Connection Error: {response.get('error')}"}
+
+        text = None
+        # HF chat-router style
+        if isinstance(response, dict) and 'choices' in response and response['choices']:
+            first = response['choices'][0]
+            if isinstance(first, dict) and first.get('message') and isinstance(first['message'], dict) and 'content' in first['message']:
+                text = first['message']['content']
+            elif isinstance(first, dict) and 'text' in first:
+                text = first['text']
+
+        # HF text-generation inference: {generated_text: '...'}
+        if text is None and isinstance(response, dict) and 'generated_text' in response:
+            text = response['generated_text']
+
+        if text is None and isinstance(response, dict) and 'output' in response:
+            out = response['output']
+            if isinstance(out, list) and out:
+                # try common keys
+                if isinstance(out[0], dict):
+                    for k in ('generated_text', 'text', 'content'):
+                        if k in out[0]:
+                            text = out[0][k]
+                            break
+                elif isinstance(out[0], str):
+                    text = out[0]
+
+        if text is None and isinstance(response, str):
+            text = response
+
+        if text is None:
+            return {"error": "LLM Connection Error: unexpected response format", "response": response}
+    except Exception as e:
+        return {"error": f"LLM Parsing Error: {str(e)}", "response": response}
 
     try:
         from json import JSONDecoder, JSONDecodeError

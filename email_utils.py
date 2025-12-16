@@ -33,6 +33,7 @@ def send_confirmation_email(user_email):
     try:
         from app import mail
         mail.send(msg)
+        return True
     except Exception as e:
         # Mail not configured or send failed — fallback to logging the URL
         try:
@@ -42,6 +43,7 @@ def send_confirmation_email(user_email):
             # Last resort: print to stdout
             print("Could not send confirmation email:", e)
             print("Confirmation URL:", confirm_url)
+        return False
 
 
 # --- Password reset helpers 
@@ -73,6 +75,7 @@ def send_password_reset_email(user_email):
     try:
         from app import mail
         mail.send(msg)
+        return True
     except Exception as e:
         try:
             current_app.logger.warning(f"Could not send password reset email: {e}")
@@ -80,3 +83,4 @@ def send_password_reset_email(user_email):
         except Exception:
             print("Could not send password reset email:", e)
             print("Password reset URL:", reset_url)
+        return False

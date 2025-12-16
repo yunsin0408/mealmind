@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function(){
         button.addEventListener('click', function(){
             const card = this.closest('.recipe-card');
             const data = JSON.parse(card.querySelector('.recipe-data').textContent);
-            fetch('{{ url_for("routes.save_favorite") }}', {
+            fetch('{{ url_for("routes.favorites") }}', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)

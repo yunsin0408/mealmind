@@ -2,7 +2,6 @@ import requests
 from flask import current_app
 
 def query(payload):
-    # We access the config securely using current_app
     api_url = current_app.config['HF_URL']
     api_token = current_app.config['HF_TOKEN']
     
@@ -15,7 +14,13 @@ def query(payload):
     }
 
     try:
-        response = requests.post(api_url, headers=headers, json=payload)
+        response = requests.post(api_url, headers=headers, json=payload, timeout=30)
+        # If HF returns a non-2xx status, return the body for debugging
+        if not response.ok:
+            try:
+                return {"error": response.json(), "status_code": response.status_code}
+            except Exception:
+                return {"error": response.text, "status_code": response.status_code}
         return response.json()
     except Exception as e:
         return {"error": str(e)}
