@@ -77,11 +77,14 @@ class PantryItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    # Associate pantry items to users so each user has their own pantry
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     quantity = db.Column(db.Float, nullable=True)
     unit = db.Column(db.String(50), nullable=True)  # e.g., "lbs", "cups", "pieces"
     expiration_date = db.Column(db.Date, nullable=True)
 
     category = db.relationship('PantryCategory', backref='items')
+    user = db.relationship('User', backref=db.backref('pantry_items', lazy='dynamic'))
 
     def __repr__(self):
         return f"<PantryItem {self.name}>"

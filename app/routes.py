@@ -165,7 +165,8 @@ def pantry():
     category_id = request.args.get("category", "").strip()
     q = request.args.get("q", "").strip()
     exp_before = request.args.get("exp_before", "").strip()
-    query = PantryItem.query
+    # only show items owned by current user
+    query = PantryItem.query.filter(PantryItem.user_id == current_user.id)
     if category_id:
         try:
             cid = int(category_id)
@@ -211,6 +212,7 @@ def add_item():
         expiration_date = None
 
     new_item = PantryItem(name=name, category_id=int(category_id) if category_id else None,
+                          user_id=current_user.id,
                           quantity=float(quantity) if quantity else None,
                           unit=unit, expiration_date=expiration_date)
     db.session.add(new_item)
@@ -222,6 +224,10 @@ def add_item():
 def delete_item(item_id):
     from .models import PantryItem
     item = PantryItem.query.get_or_404(item_id)
+    # ensure user owns the item (or admin)
+    if item.user_id != current_user.id and not getattr(current_user, 'is_admin', False):
+        flash('Not authorized to delete this item.', 'danger')
+        return redirect(url_for('routes.pantry'))
     db.session.delete(item)
     db.session.commit()
     return redirect(url_for('routes.pantry'))
@@ -232,6 +238,9 @@ def delete_item(item_id):
 def edit_item(item_id):
     from .models import PantryItem, PantryCategory
     item = PantryItem.query.get_or_404(item_id)
+    if item.user_id != current_user.id and not getattr(current_user, 'is_admin', False):
+        flash('Not authorized to edit this item.', 'danger')
+        return redirect(url_for('routes.pantry'))
     categories = PantryCategory.query.order_by(PantryCategory.name).all()
     if request.method == 'GET':
         return render_template('pantry/edit_item.html', item=item, categories=categories)
@@ -326,12 +335,23 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         # Send confirmation email (if mail configured this will send, otherwise URL will be logged)
+        from flask import current_app
+        from email_utils import send_confirmation_email
+        sent = False
         try:
-            from email_utils import send_confirmation_email
-            send_confirmation_email(new_user.email)
+            sent = send_confirmation_email(new_user.email)
+        except Exception as e:
+            # log unexpected exceptions while attempting to send
+            try:
+                current_app.logger.exception(f"Unexpected error sending confirmation email: {e}")
+            except Exception:
+                print("Unexpected error sending confirmation email:", e)
+            sent = False
+
+        if sent:
             flash('Registration successful. A confirmation email has been sent. Please check your inbox.', 'info')
-        except Exception:
-            flash('Registration successful. (Could not send confirmation email.)', 'warning')
+        else:
+            flash('Registration unsuccessful. (Could not send confirmation email.)', 'warning')
         return redirect(url_for('routes.login'))
 
     return render_template('profile/register.html')

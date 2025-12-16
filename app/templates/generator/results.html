@@ -124,21 +124,25 @@ document.addEventListener('DOMContentLoaded', function(){
         button.addEventListener('click', function(){
             const card = this.closest('.recipe-card');
             const data = JSON.parse(card.querySelector('.recipe-data').textContent);
-            fetch('{{ url_for("routes.favorites") }}', {
+            fetch('{{ url_for("routes.api_save_recipe") }}', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             })
             .then(response => response.json())
             .then(result => {
-                if(result.success){
+                if(result && result.status === 'ok'){
                     showAlert('Recipe saved to favorites!', 'success');
                     this.classList.remove('btn-outline-success', 'js-save');
                     this.classList.add('btn-outline-danger', 'js-unsave');
                     this.innerHTML = '<i class="fa-solid fa-heart-crack"></i> Remove Favorite';
                 } else {
-                    showAlert(result.error || 'Failed to save recipe.', 'danger');
+                    showAlert(result.message || result.error || 'Failed to save recipe.', 'danger');
                 }
+            })
+            .catch(err => {
+                showAlert('Failed to save recipe.', 'danger');
+                console.error('Save recipe error', err);
             });
         });
     });
