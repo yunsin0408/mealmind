@@ -1,7 +1,8 @@
 # Mealmind 
 Mealmind is a smart virtual pantry application designed to help users track ingredients, reduce food waste, and generate creative meal ideas based on what they already have at home. 
 
-[![Watch the System Demo](https://img.youtube.com/vi/lWiCT5hijUI/0.jpg)](https://youtu.be/lWiCT5hijUI)
+[Watch the System Demo]
+(https://img.youtube.com/vi/lWiCT5hijUI/0.jpg)](https://youtu.be/lWiCT5hijUI)
 
 ## 🚀 Features [IN PROGRESS]
  **Virtual Pantry Tracker**:
