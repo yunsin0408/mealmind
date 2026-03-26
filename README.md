@@ -1,4 +1,4 @@
-# [Mealmind](https://mealmind-five.vercel.app)Mealmind
+# [Mealmind](https://mealmind-five.vercel.app)
 Mealmind is a smart virtual pantry application designed to help users track ingredients, reduce food waste, and generate creative meal ideas based on what they already have at home. 
 
 ## Watch the System Demo:
