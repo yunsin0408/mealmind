@@ -1,5 +1,8 @@
-# Mealmind 
+# [Mealmind](https://mealmind-five.vercel.app)
 Mealmind is a smart virtual pantry application designed to help users track ingredients, reduce food waste, and generate creative meal ideas based on what they already have at home. 
+
+## Live App
+Use the deployed app here: https://mealmind-five.vercel.app
 
 ## Watch the System Demo:
 [![Watch the System Demo](https://img.youtube.com/vi/lWiCT5hijUI/0.jpg)](https://youtu.be/lWiCT5hijUI)
@@ -28,6 +31,10 @@ Mealmind is a smart virtual pantry application designed to help users track ingr
 * **Authentication**: Flask-Login
 * **Utilities**: Python-dotenv, Email-validator
 
+## Database Note
+- Current local setup uses SQLite.
+- PostgreSQL will be added in future deployment.
+
 ## Project Structure
 ```text
 mealmind/
@@ -44,7 +51,9 @@ mealmind/
 │       └── admin_dashboard.html
 ├── instance/
 │   └── mealmind.db         # SQLite Database
-├── run.py                  # Entry point to run the app
+├── api/
+│   └── index.py            # Vercel entrypoint (public deployment)
+├── run.py                  # Local development entrypoint
 ├── config.py               # Config settings
 ├── requirements.txt        # Project dependencies
 └── .env                    # Environment variables (Hidden)
@@ -55,7 +64,7 @@ mealmind/
 * Python 3.8 or higher
 * Git
 
-### Installation
+### Installation (Local Deployment)
 1. **Clone the repository**
 ```bash
 git clone https://github.com/yunsin0408/mealmind.git
@@ -99,8 +108,7 @@ MAIL_PASSWORD=your_email_password
 
 ```
 
-
-5. **Initialize the Database**
+5. **Initialize Database**
 
 The app is set to create the database automatically on the first run.
 
@@ -110,8 +118,7 @@ python run.py
 
 ```
 
-
-Open your browser and navigate to `http://127.0.0.1:5000`.
+Open your browser and navigate to `http://127.0.0.1:5001`.
 
 ## Usage
 1. Register a new account. Confirm your account via email

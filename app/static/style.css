@@ -1,179 +1,284 @@
-/* --- Global & Typography --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700;800&display=swap');
 
 :root {
-    --primary-green: #10b981; /* Fresh Emerald */
-    --hover-green: #059669;
-    --bg-color: #f8faf9;      /* Very pale organic white */
-    --text-main: #1f2937;
-    --text-muted: #6b7280;
-    --card-bg: #ffffff;
-    --border-radius: 12px;
+    --accent-color: #14a67a;
+    --accent-dark: #0f8f69;
+    --accent-soft: #dff5eb;
+    --ink: #243533;
+    --muted-ink: #6f7f7c;
+    --shell: #ecebe6;
+    --paper: #f8f8f5;
+    --card: #ffffff;
+    --line: #d8ddd9;
+    --danger: #dc2626;
+    --radius-main: 18px;
+    --radius-small: 12px;
 }
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    line-height: 1.6;
+    color: var(--ink);
+    line-height: 1.55;
+    background: var(--shell);
+    min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5 {
-    font-family: 'Poppins', sans-serif;
-    color: #064e3b; /* Deep Forest Green */
-    font-weight: 600;
+    font-family: 'Nunito', sans-serif;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    font-weight: 800;
 }
 
-/* --- Navigation --- */
+.text-muted {
+    color: var(--muted-ink) !important;
+}
+
 .navbar {
-    background-color: var(--card-bg) !important;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 1rem 2rem;
+    background: rgba(248, 248, 245, 0.94) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(36, 53, 51, 0.08);
+    padding: 0.8rem 1.5rem;
+}
+
+.navbar-brand {
+    color: #1b6c56 !important;
+    font-family: 'Nunito', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 1.45rem !important;
+    letter-spacing: 0;
 }
 
 .nav-link {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    color: var(--text-main) !important;
-    margin-left: 1rem;
-    transition: color 0.2s;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.93rem;
+    color: var(--ink) !important;
+    margin-left: 0.75rem;
+    border-radius: 10px;
+    padding: 0.45rem 0.72rem !important;
+    line-height: 1.2;
+    transition: all 0.2s ease;
 }
 
-.nav-link:hover {
-    color: var(--primary-green) !important;
+.navbar .btn {
+    font-size: 0.93rem;
+    padding: 0.45rem 0.9rem;
+    line-height: 1.2;
 }
 
+.nav-link:hover,
 .nav-link.active {
-    color: var(--primary-green) !important;
+    color: var(--accent-dark) !important;
+    background: var(--accent-soft);
 }
 
 .nav-icon-img {
-    width: 50px;  
-    height: 50px; 
-    
-    object-fit: contain; 
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
     margin-right: 8px;
     vertical-align: middle;
 }
 
-/* --- Cards & Containers --- */
 .container {
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: 1120px;
 }
 
-.card, .control-panel, .recipe-card {
-    background: var(--card-bg);
-    border: 1px solid #e5e7eb;
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    /* NO SHADOW as requested */
-    box-shadow: none !important; 
-    margin-bottom: 1.5rem;
+.card,
+.control-panel,
+.recipe-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-main);
+    padding: 1.35rem;
+    box-shadow: 0 8px 20px rgba(30, 48, 45, 0.06);
+    margin-bottom: 1rem;
 }
 
-/* --- Forms & Inputs --- */
+.card:hover,
+.recipe-card:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+}
+
 .form-label {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.74rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    color: #526360;
 }
 
-.form-control, .form-select, .pro-input {
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 0.95rem;
-    color: var(--text-main);
-    box-shadow: none !important; /* No internal shadows */
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: var(--primary-green);
-    background-color: #fff;
-    outline: none;
+.form-control,
+.form-select,
+.pro-input {
+    background: #ffffff;
+    border: 1px solid #dbe0dd;
+    border-radius: var(--radius-small);
+    padding: 0.68rem 0.88rem;
+    font-size: 0.94rem;
+    color: var(--ink);
     box-shadow: none !important;
 }
 
-/* --- Buttons (Flat, No Shadow) --- */
+.form-control:focus,
+.form-select:focus {
+    border-color: #8fceb9;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(20, 166, 122, 0.14) !important;
+}
+
 .btn {
-    display: inline-flex;       /* Use flex to align icon and text */
-    justify-content: center;    /* Horizontally center */
-    align-items: center;        /* Vertically center*/
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-
-    border-radius: 8px;
-    padding: 10px 24px;
-    font-weight: 500;
-    border: none;
+    border-radius: 11px;
+    padding: 0.62rem 1rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    border: 1px solid transparent;
     box-shadow: none;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
 }
 
-.btn-primary, .btn-success, .btn-primary-solid {
-    background-color: var(--primary-green);
-    color: white;
+.btn-primary,
+.btn-success,
+.btn-primary-solid {
+    background: #14a67a;
+    color: #ffffff;
 }
 
-.btn-primary:hover, .btn-success:hover, .btn-primary-solid:hover {
-    background-color: var(--hover-green);
+.btn-primary:hover,
+.btn-success:hover,
+.btn-primary-solid:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 14px rgba(16, 140, 106, 0.18);
 }
 
 .btn-outline-secondary {
-    border: 1px solid #d1d5db;
-    color: var(--text-main);
+    border-color: #ccd3cf;
+    color: #334745;
+    background: #ffffff;
 }
 
 .btn-outline-secondary:hover {
-    background-color: #f3f4f6;
-    color: var(--text-main);
+    background: #eef2f0;
+    color: #293c39;
+    border-color: #c0c8c4;
 }
 
-.btn-danger {
-    background-color: #ef4444;
+.btn-outline-success {
+    border-color: #9ed7bf;
+    color: #167b5d;
+    background: #effaf4;
 }
 
-/* --- Tables (For Favorites/Pantry) --- */
+.btn-outline-success:hover,
+.btn-check:checked + .btn-outline-success {
+    background: #dff5eb;
+    color: #146a52;
+    border-color: #8cc8ae;
+}
+
+.btn-outline-danger {
+    border-color: #efc6c6;
+    color: #a33b3b;
+    background: #fff8f8;
+}
+
+.btn-outline-danger:hover {
+    background: #ffeceb;
+}
+
+.btn-light {
+    background: #ffffff;
+    border: 1px solid #d3d8d5;
+}
+
 .table {
     margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
 .table th {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: #5b6f6b;
     border-bottom-width: 1px;
-    font-weight: 600;
+    font-weight: 700;
+    background: #f5f7f6;
 }
 
 .table td {
     vertical-align: middle;
-    padding: 1rem 0.75rem;
-    border-bottom: 1px solid #f3f4f6;
+    padding: 0.88rem 0.7rem;
+    border-bottom: 1px solid #ecf0ee;
 }
 
-/* --- Badges --- */
 .badge-custom {
-    background-color: #ecfdf5;
-    color: var(--primary-green);
-    padding: 5px 10px;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+    background: #edf7f2;
+    color: #1e5a4a;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid #c9e6d9;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0;
+    transition: all 0.2s ease;
 }
 
-/* --- Icons --- */
+.badge-custom:hover {
+    color: #15493b;
+    background: #e4f3ec;
+    border-color: #b9ddcd;
+}
+
+.alert {
+    border-radius: 12px;
+}
+
 .action-icon {
-    color: #9ca3af;
+    color: #7b8e8a;
     margin-left: 10px;
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1.04rem;
     transition: color 0.2s;
     border: none;
     background: none;
 }
-.action-icon:hover.edit { color: #3b82f6; }
-.action-icon:hover.delete { color: #ef4444; }
+
+.action-icon:hover.edit {
+    color: #3b82f6;
+}
+
+.action-icon:hover.delete {
+    color: var(--danger);
+}
+
+hr {
+    border-color: rgba(36, 53, 51, 0.1);
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.7rem 0.9rem;
+    }
+
+    .card,
+    .control-panel,
+    .recipe-card {
+        padding: 1rem;
+    }
+
+    .navbar .btn,
+    .nav-link {
+        font-size: 0.9rem;
+    }
+}
