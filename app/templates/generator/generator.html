@@ -1,9 +1,11 @@
 {# Generator partial: include this where you want the form to appear #}
-<div class="text-center mb-5">
+<div class="text-center mb-2">
     <h1>What are we cooking?</h1>
-    <p class="text-muted">Let AI help you reduce waste and discover new flavors.</p>
+    <p class="text-muted">
+       Let AI help you reduce waste and discover new flavors.
+       {% if not current_user.is_authenticated %}<br>Test Mealmind without login.{% endif %}
+    </p>
 </div>
-
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="card">

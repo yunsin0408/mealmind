@@ -678,13 +678,30 @@ def api_unsave_recipe():
 @routes_bp.route("/", methods=["GET", "POST"])
 def index():
     from .models import PantryItem
+
+    if current_user.is_authenticated:
+        pantry_query = PantryItem.query.filter(PantryItem.user_id == current_user.id)
+    else:
+        # default pantry for guests (shared items without an owner)
+        pantry_query = PantryItem.query.filter(PantryItem.user_id.is_(None))
+
     if request.method == "POST":
         mode = request.form.get("mode")
         prioritize_flag = bool(request.form.get('prioritize_expiring'))
 
         if mode == "pantry":
             pantry_item_ids = request.form.getlist("pantry_items")
-            items = [PantryItem.query.get(int(id)) for id in pantry_item_ids if PantryItem.query.get(int(id))]
+            valid_ids = []
+            for item_id in pantry_item_ids:
+                try:
+                    valid_ids.append(int(item_id))
+                except (TypeError, ValueError):
+                    continue
+
+            if valid_ids:
+                items = pantry_query.filter(PantryItem.id.in_(valid_ids)).all()
+            else:
+                items = []
             # If prioritize flag is set, sort by expiration date (soonest first), None at end
             if prioritize_flag:
                 items = sorted(items, key=lambda it: it.expiration_date or date.max)
@@ -693,8 +710,11 @@ def index():
             else:
                 ingredients = ", ".join([item.name for item in items])
         elif mode == "random":
-            pantry_items_sorted = PantryItem.query.order_by(PantryItem.expiration_date).all()
-            ingredients = ", ".join([f"{item.name} (exp: {item.expiration_date})" for item in pantry_items_sorted if item.expiration_date])
+            pantry_items_sorted = pantry_query.order_by(PantryItem.expiration_date.asc()).all()
+            ingredients = ", ".join([
+                f"{item.name} (exp: {item.expiration_date})" if item.expiration_date else item.name
+                for item in pantry_items_sorted
+            ])
         else:
             ingredients = ""
 
@@ -747,7 +767,7 @@ def index():
 
         return render_template('generator/results.html', recipes=recipes, form_data=form_data, saved_names=saved_names)
 
-    pantry_items = PantryItem.query.all()
+    pantry_items = pantry_query.order_by(PantryItem.name.asc()).all()
   
     from flask import current_app
     hf_model = current_app.config.get('HF_MODEL')

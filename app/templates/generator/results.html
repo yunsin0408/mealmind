@@ -65,11 +65,11 @@
                         {% set name = recipe.meal_name|default('') %}
                         {% if saved_names and name in saved_names %}
                             <button class="btn btn-outline-danger js-unsave">
-                                <i class="fa-solid fa-heart-crack"></i> Remove Favorite
+                                <i class="fa-solid fa-heart-crack me-2"></i>Remove Favorite
                             </button>
                         {% else %}
                             <button class="btn btn-outline-success js-save">
-                                <i class="fa-regular fa-heart"></i> Save to Favorites
+                                <i class="fa-regular fa-heart me-2"></i>Save to Favorites
                             </button>
                         {% endif %}
                         </div>
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     showAlert('Recipe saved to favorites!', 'success');
                     this.classList.remove('btn-outline-success', 'js-save');
                     this.classList.add('btn-outline-danger', 'js-unsave');
-                    this.innerHTML = '<i class="fa-solid fa-heart-crack"></i> Remove Favorite';
+                    this.innerHTML = '<i class="fa-solid fa-heart-crack me-2"></i>Remove Favorite';
                 } else {
                     showAlert(result.message || result.error || 'Failed to save recipe.', 'danger');
                 }

@@ -67,7 +67,7 @@
         {% if messages %}
             <div class="mb-4">
             {% for category, msg in messages %}
-                <div class="alert alert-{{ category if category else 'info' }} border-0" style="background-color: #d1fae5; color: #065f46;">
+                <div class="alert alert-{{ category if category else 'info' }} border-0">
                     {{ msg }}
                 </div>
             {% endfor %}
