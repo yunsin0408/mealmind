@@ -7,10 +7,17 @@ import json
 import os
 from flask_login import LoginManager
 from flask_mail import Mail
+from config import DevelopmentConfig, ProductionConfig
 
 db = SQLAlchemy()
 
-def create_app(config_class=DevelopmentConfig):
+def create_app(config_class=None):
+    if config_class is None:
+        if os.getenv('VERCEL') or os.getenv('FLASK_ENV') == 'production':
+            config_class = ProductionConfig
+        else:
+            config_class = DevelopmentConfig
+
     app = Flask(__name__, template_folder='templates', static_folder='static')
     CORS(app)
     app.config.from_object(config_class)
