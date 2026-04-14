@@ -22,6 +22,9 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///mealmind.db'
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///mealmind.db')
+    db_url = os.getenv('POSTGRES_URL', os.getenv('DATABASE_URL', 'sqlite:///mealmind.db'))
+    if db_url.startswith('postgres://'):
+        db_url = db_url.replace('postgres://', 'postgresql://', 1)
+    SQLALCHEMY_DATABASE_URI = db_url
 
   
