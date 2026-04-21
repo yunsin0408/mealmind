@@ -4,5 +4,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from app import create_app
+from config import ProductionConfig
 
-app = create_app()
+# Always use ProductionConfig on Vercel 
+app = create_app(config_class=ProductionConfig)

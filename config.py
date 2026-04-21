@@ -19,12 +19,23 @@ class Config:
     MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER')
 
 class DevelopmentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///mealmind.db'
+    sqlLite_db_url = os.getenv('DATABASE_URL')
+    if not sqlLite_db_url:
+        raise RuntimeError(
+            "No database URL configured for development. "
+            "Set the DATABASE_URL environment variable "
+            "to a SQLite connection string in your Vercel project settings."
+        )
+    SQLALCHEMY_DATABASE_URI = sqlLite_db_url
 
 class ProductionConfig(Config):
-    db_url = os.getenv('POSTGRES_URL', os.getenv('DATABASE_URL', 'sqlite:///mealmind.db'))
-    if db_url.startswith('postgres://'):
-        db_url = db_url.replace('postgres://', 'postgresql://', 1)
-    SQLALCHEMY_DATABASE_URI = db_url
-
-  
+    _db_url = os.getenv('POSTGRES_DB_DATABASE_URL') 
+    if not _db_url:
+        raise RuntimeError(
+            "No database URL configured for production. "
+            "Set the POSTGRES_DB_DATABASE_URL or DATABASE_URL environment variable "
+            "to a PostgreSQL connection string in your Vercel project settings."
+        )
+    if _db_url.startswith('postgres://'):
+        _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
+    SQLALCHEMY_DATABASE_URI = _db_url
