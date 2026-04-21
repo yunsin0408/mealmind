@@ -746,14 +746,6 @@ def index():
 
         recipes = generate_recipes_hf(ingredients, categories, style, preferences, instructions, model_override=model_choice, allergies=allergies)
 
-        # Filter: only keep recipes with fewer than 3 missing ingredients
-        if isinstance(recipes, list):
-            recipes = [
-                r for r in recipes
-                if isinstance(r, dict) and len(r.get('missing_ingredients') or []) < 3
-            ]
-
-
         form_data = {
             'mode': request.form.get('mode'),
             'pantry_items': request.form.getlist('pantry_items'),
