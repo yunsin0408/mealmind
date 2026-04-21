@@ -39,7 +39,7 @@ Return **strict JSON array** of recipes. Each recipe must have:
     - meal_name
     - description
     - pantry_ingredients (list of ingredients used from the provided list)
-    - missing_ingredients (list of any additional ingredients needed)
+    - missing_ingredients (list of any additional ingredients needed, should be limited to under 3)
     - instructions (list)
 
     Prioritize recipes that use all the provided ingredients. If insufficient ingredients are given, suggest complementary ingredients commonly used in the specified cuisine style.
@@ -750,8 +750,9 @@ def index():
         if isinstance(recipes, list):
             recipes = [
                 r for r in recipes
-                if len(r.get('missing_ingredients') or []) < 3
+                if isinstance(r, dict) and len(r.get('missing_ingredients') or []) < 3
             ]
+
 
         form_data = {
             'mode': request.form.get('mode'),
