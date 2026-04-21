@@ -26,14 +26,14 @@ Use the deployed app here: https://mealmind-five.vercel.app
 
 ## 🚀 Tech Stack
 * **Backend**: Python 3.10+, Flask
-* **Database**: SQLite (via SQLAlchemy ORM)
-* **Frontend**: HTML5, CSS3, Jinja2 Templates
+* **Database**: PostgresSQL(Vercel), SQLite (via SQLAlchemy ORM)
+* **Frontend**: HTML5, CSS3, Jinja2 
 * **Authentication**: Flask-Login
 * **Utilities**: Python-dotenv, Email-validator
 
 ## Database Note
-- Current local setup uses SQLite.
-- PostgreSQL will be added in future deployment.
+- Local setup uses SQLite.
+- Public setup uses PostgresSQL.
 
 ## Project Structure
 ```text
