@@ -15,7 +15,6 @@ DIETARY_PREFERENCES = ['Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free']
 def generate_recipes_hf(ingredients, categories, style, preferences, instructions, model_override=None, allergies=None):
     import json
     from flask import current_app
-    # allergies can be passed inside `instructions` or we will append below if provided
     if "(exp:" in ingredients:
         prompt = f"""Generate 3 random meal ideas for {categories} meals in {style} style. Select random ingredients from this pantry list: {ingredients}, prioritizing those with earlier expiration dates. Dietary Preferences: {preferences}. {instructions}
 
@@ -746,6 +745,14 @@ def index():
                 allergies = None
 
         recipes = generate_recipes_hf(ingredients, categories, style, preferences, instructions, model_override=model_choice, allergies=allergies)
+
+        # Filter: only keep recipes with fewer than 3 missing ingredients
+        if isinstance(recipes, list):
+            recipes = [
+                r for r in recipes
+                if len(r.get('missing_ingredients') or []) < 3
+            ]
+
         form_data = {
             'mode': request.form.get('mode'),
             'pantry_items': request.form.getlist('pantry_items'),
